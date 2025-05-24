@@ -1,5 +1,8 @@
 /target
 
+# Environment variables
+.env
+
 # Devenv
 .devenv*
 devenv.local.nix

@@ -3,5 +3,7 @@
 {
   languages.rust.enable = true;
 
-  packages = [];
+  packages = [
+    pkgs.postgresql
+  ];
 }
