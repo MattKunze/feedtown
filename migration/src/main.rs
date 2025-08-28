@@ -14,8 +14,7 @@ async fn main() {
         let database = env::var("DB_NAME").expect("DB_NAME must be set");
 
         let database_url = format!(
-            "postgresql://{}:{}@{}:{}/{}",
-            username, password, host, port, database
+            "postgresql://{username}:{password}@{host}:{port}/{database}"
         );
         env::set_var("DATABASE_URL", database_url);
     }
