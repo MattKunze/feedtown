@@ -1,10 +1,4 @@
-use axum::{
-    extract::State,
-    http::StatusCode,
-    response::Json,
-    routing::get,
-    Router,
-};
+use axum::{extract::State, http::StatusCode, response::Json, routing::get, Router};
 use serde::Serialize;
 use std::net::SocketAddr;
 use tower::ServiceBuilder;
@@ -20,7 +14,9 @@ struct HealthResponse {
     version: String,
 }
 
-async fn health_handler(State(_state): State<AppState>) -> Result<Json<HealthResponse>, StatusCode> {
+async fn health_handler(
+    State(_state): State<AppState>,
+) -> Result<Json<HealthResponse>, StatusCode> {
     let response = HealthResponse {
         status: "healthy".to_string(),
         version: env!("CARGO_PKG_VERSION").to_string(),
