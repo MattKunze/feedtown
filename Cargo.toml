@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "api",
+    "db",
     "migration",
 ]
 resolver = "2"
