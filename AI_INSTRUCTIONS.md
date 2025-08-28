@@ -60,8 +60,9 @@ Feedtown is a modular Rust application built using Cargo workspaces. The project
 - `cargo run --bin api` - Run the API server
 - `cargo build` - Build all workspace crates
 - `cargo test` - Run all tests
-- `cargo fmt` - Format code
-- `cargo clippy` - Run lints
+- `cargo fmt` - Format code (run after any code changes)
+- `cargo clippy --fix` - Run lints and apply automatic fixes (run after any code changes)
+- `cargo clippy` - Run lints without applying fixes
 
 ### Adding New Crates
 1. Create new directory: `mkdir crate-name`
@@ -84,7 +85,7 @@ When suggesting code:
 - File organization: api/src/main.rs for main API server
 
 ### For Development Tasks (Claude/OpenCode)
-- Always run `cargo fmt` and `cargo clippy` after making changes
+- **CRITICAL**: Always run `cargo fmt` and `cargo clippy --fix` after making any Rust code changes to ensure code follows Rust standards and formatting conventions
 - Test changes with `cargo test`
 - Follow the testing approach outlined above
 - Use the common commands reference for development workflow
