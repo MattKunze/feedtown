@@ -6,8 +6,9 @@ Feedtown is a modular Rust application built using Cargo workspaces. The project
 
 ## Project Structure
 
-- **Root**: Workspace configuration with shared dependencies
+- **Root**: Workspace configuration with shared dependencies (only for truly cross-crate dependencies)
 - **api/**: HTTP API server built with Axum framework
+- **migration/**: Database migration tooling with Sea-ORM
 - Future crates will be added as separate workspace members
 
 ## Development Guidelines
@@ -24,7 +25,8 @@ Feedtown is a modular Rust application built using Cargo workspaces. The project
 ### Architecture Principles
 - Workspace-based modular architecture with each crate having a single, well-defined responsibility
 - Prefer dependency injection and trait-based abstractions
-- Use workspace dependencies to maintain version consistency
+- Use workspace dependencies ONLY for truly shared dependencies across multiple crates
+- Keep crate-specific dependencies isolated to maintain clear separation of concerns
 - Keep external dependencies minimal and well-justified
 - Tower middleware for cross-cutting concerns (tracing, CORS, authentication)
 
@@ -44,7 +46,10 @@ Feedtown is a modular Rust application built using Cargo workspaces. The project
 
 ### Dependencies & Common Patterns
 - **Key Dependencies**: axum (web framework), tokio (async runtime), tower/tower-http (middleware), tracing (structured logging), serde (serialization)
-- Prefer workspace dependencies defined in root `Cargo.toml`
+- **Dependency Organization**: Use workspace dependencies ONLY for truly shared dependencies across multiple crates (tokio, tracing, serde, dotenvy). Crate-specific dependencies should be declared directly in each crate's Cargo.toml
+- **Shared Dependencies** (keep in workspace): tokio, tracing, tracing-subscriber, serde, serde_json, dotenvy
+- **API-specific Dependencies** (api/Cargo.toml): axum, tower, tower-http
+- **Migration-specific Dependencies** (migration/Cargo.toml): sea-orm, sea-orm-migration, async-std
 - Always specify features explicitly
 - Avoid heavyweight dependencies unless necessary
 - State management with Axum extractors
@@ -63,12 +68,14 @@ Feedtown is a modular Rust application built using Cargo workspaces. The project
 2. Add to workspace members in root `Cargo.toml`
 3. Create crate's `Cargo.toml` inheriting workspace properties
 4. Follow naming convention: kebab-case for crate names
+5. **Dependencies**: Only add dependencies to workspace if they are truly shared across multiple crates. Otherwise, declare dependencies directly in the crate's Cargo.toml with explicit versions and features
 
 ## Tool-Specific Guidance
 
 ### For Code Generation (GitHub Copilot)
 When suggesting code:
-- Use workspace dependencies when possible
+- Use workspace dependencies (.workspace = true) ONLY for shared dependencies (tokio, tracing, serde, dotenvy)
+- Declare crate-specific dependencies directly with explicit versions
 - Include proper error handling with Result types
 - Add appropriate logging statements with tracing
 - Follow async/await patterns with tokio
