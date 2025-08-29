@@ -3,6 +3,12 @@ use std::env;
 use thiserror::Error;
 use tracing::{error, info};
 
+pub mod models;
+pub mod services;
+
+pub use models::user;
+pub use services::UserService;
+
 #[derive(Error, Debug)]
 pub enum DbError {
     #[error("Database connection error: {0}")]
@@ -46,6 +52,10 @@ impl DbManager {
 
     pub fn get_connection(&self) -> &DatabaseConnection {
         &self.connection
+    }
+
+    pub fn user_service(&self) -> UserService {
+        UserService::new(self.connection.clone())
     }
 
     fn build_database_url() -> DbResult<String> {

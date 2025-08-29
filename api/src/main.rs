@@ -6,6 +6,8 @@ use tower::ServiceBuilder;
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
+mod handlers;
+
 #[derive(Clone)]
 struct AppState {
     db: DbManager,
@@ -52,6 +54,7 @@ fn create_router(db: DbManager) -> Router {
 
     Router::new()
         .route("/health", get(health_handler))
+        .nest("/api", handlers::user_routes())
         .layer(
             ServiceBuilder::new()
                 .layer(TraceLayer::new_for_http())

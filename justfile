@@ -10,5 +10,5 @@ migrate:
   cargo run --bin migration -- up
 
 lint-fix:
-  cargo clippy --fix
+  cargo clippy --fix --allow-dirty
   cargo fmt
