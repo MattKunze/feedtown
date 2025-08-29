@@ -4,6 +4,10 @@ Cargo.lock
 **/*.rs.bk
 *.pdb
 
+# Nodejs
+node_modules/
+.vite/
+
 # IDE
 .vscode/
 .idea/
