@@ -22,7 +22,17 @@ pub fn user_routes() -> Router<AppState> {
         .route("/users/:id", delete(delete_user))
 }
 
-async fn create_user(
+#[utoipa::path(
+    post,
+    path = "/api/users",
+    tag = "users",
+    request_body = CreateUserRequest,
+    responses(
+        (status = 200, description = "User created successfully", body = user::Model),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn create_user(
     State(state): State<AppState>,
     Json(payload): Json<CreateUserRequest>,
 ) -> Result<Json<user::Model>, StatusCode> {
@@ -37,6 +47,15 @@ async fn create_user(
     }
 }
 
+#[utoipa::path(
+    get,
+    path = "/api/users",
+    tag = "users",
+    responses(
+        (status = 200, description = "List of users", body = Vec<user::Model>),
+        (status = 500, description = "Internal server error")
+    )
+)]
 async fn list_users(State(state): State<AppState>) -> Result<Json<Vec<user::Model>>, StatusCode> {
     let user_service = state.db.user_service();
 
@@ -49,6 +68,19 @@ async fn list_users(State(state): State<AppState>) -> Result<Json<Vec<user::Mode
     }
 }
 
+#[utoipa::path(
+    get,
+    path = "/api/users/{id}",
+    tag = "users",
+    params(
+        ("id" = i32, Path, description = "User ID")
+    ),
+    responses(
+        (status = 200, description = "User found", body = user::Model),
+        (status = 404, description = "User not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 async fn get_user(
     State(state): State<AppState>,
     Path(id): Path<i32>,
@@ -65,6 +97,20 @@ async fn get_user(
     }
 }
 
+#[utoipa::path(
+    put,
+    path = "/api/users/{id}",
+    tag = "users",
+    params(
+        ("id" = i32, Path, description = "User ID")
+    ),
+    request_body = UpdateUserRequest,
+    responses(
+        (status = 200, description = "User updated successfully", body = user::Model),
+        (status = 404, description = "User not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 async fn update_user(
     State(state): State<AppState>,
     Path(id): Path<i32>,
@@ -82,6 +128,19 @@ async fn update_user(
     }
 }
 
+#[utoipa::path(
+    delete,
+    path = "/api/users/{id}",
+    tag = "users",
+    params(
+        ("id" = i32, Path, description = "User ID")
+    ),
+    responses(
+        (status = 200, description = "User deleted successfully", body = Value),
+        (status = 404, description = "User not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 async fn delete_user(
     State(state): State<AppState>,
     Path(id): Path<i32>,

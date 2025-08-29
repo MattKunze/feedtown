@@ -13,3 +13,4 @@ tracing.workspace = true
 serde.workspace = true
 thiserror = "1.0"
 chrono = { version = "0.4", features = ["serde"] }
+utoipa = "4.0"
